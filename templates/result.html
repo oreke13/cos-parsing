@@ -22,7 +22,7 @@
     <h2>{{ insta_name }}:</h2>
     <ul>
         <li><strong>Имя:</strong> {{ data["Instagram"][insta_name]["Main info"]["Name"] }}</li>
-        <li><strong>Посты:</strong></li>
+        <li><strong>Биография:</strong> {{ data["Instagram"][insta_name]["Main info"]["Bio"] }}</li>
         <ul>
             {% for link in data["Instagram"][insta_name] %}
             <li><img src="{{ link }}"></li>
