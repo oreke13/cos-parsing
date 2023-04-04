@@ -23,11 +23,9 @@
     <ul>
         <li><strong>Имя:</strong> {{ data["Instagram"][insta_name]["Main info"]["Name"] }}</li>
         <li><strong>Биография:</strong> {{ data["Instagram"][insta_name]["Main info"]["Bio"] }}</li>
-        <ul>
-            {% for link in data["Instagram"][insta_name] %}
-            <li><img src="{{ link }}"></li>
-            {% endfor %}
-        </ul>
+        <li><strong>Фото профиля:</strong> {{ data["Instagram"][insta_name]["Main info"]["Ava"] }}</li>
+        <img src='{{ data["Instagram"][insta_name]["Main info"]["Ava"] }}'>
+
     </ul>
 </body>
 
