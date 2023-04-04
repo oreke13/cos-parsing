@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>VK & Instagram Comparison - Результаты</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>VK & Instagram Comparison - Результаты</h1>
+    <h2>{{ vk_nick }}:</h2>
+    <ul>
+        <li><strong>Имя:</strong> {{ data["VK"][vk_nick]["Main info"]["Name"] }}</li>
+        <li><strong>Дополнительная информация:</strong></li>
+        <ul>
+            {% for info in data["VK"][vk_nick]["Data"]["AboutUser"] %}
+            <li>{{ info }}</li>
+            {% endfor %}
+        </ul>
+    </ul>
+    <h2>{{ insta_name }}:</h2>
+    <ul>
+        <li><strong>Имя:</strong> {{ data["Instagram"][insta_name]["Main info"]["Name"] }}</li>
+        <li><strong>Посты:</strong></li>
+        <ul>
+            {% for link in data["Instagram"][insta_name] %}
+            <li><img src="{{ link }}"></li>
+            {% endfor %}
+        </ul>
+    </ul>
+</body>
+
+</html>
