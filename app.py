@@ -4,7 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from flask import Flask, render_template, request
+from instagrapi import Client
 
+cl = Client()
+cl.login("orekevfx", "Oaai13122001*")
 app = Flask(__name__)
 
 class Parsing:
@@ -78,21 +81,29 @@ class Parsing:
             data = "Not found"
         finally:
             current_info.update(data)
-    
+
         all_info.update({"Groups": current_info})
 
     def insta_main_information(self, all_info):
         current_info = {}
         try:
-            name = self.insta_soup.find("h1", class_="rhpdm").text.strip()
+            name1 = cl.user_info_by_username(self.insta_username).dict()
+            name = name1["full_name"]
+            bio = name1["biography"]
+            ava = name1["profile_pic_url_hd"]
+            
         except AttributeError:
             name = "Not found"
+            bio = "Not found"
+            ava = "Not found"
         finally:
             current_info.update(Name=str(name))
-
+            current_info.update(Bio=str(bio))
+            current_info.update(Ava=str(ava))
+        print(name1)
         all_info.update({"Main info": current_info})
 
-    
+
 
 class Write():
     def __init__(self, user_nick, dict_for_write):
@@ -122,5 +133,3 @@ def result():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
