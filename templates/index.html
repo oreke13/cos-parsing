@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>VK & Instagram Comparison</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>VK & Instagram Comparisonr</h1>
+    <form method="post" action="/result">
+        <label for="vk_user_nick">Введите ник VK:</label>
+        <input type="text" id="vk_user_nick" name="vk_user_nick">
+        <label for="insta_user_name">Введите имя пользователя Instagram:</label>
+        <input type="text" id="insta_user_name" name="insta_user_name">
+        <input type="submit" value="Анализировать">
+    </form>
+</body>
+
+</html>
