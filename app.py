@@ -1,13 +1,12 @@
-from fileinput import filename
-from textwrap import indent
 import requests
 from bs4 import BeautifulSoup
 import json
 from flask import Flask, render_template, request
 from instagrapi import Client
+import os
 
 cl = Client()
-cl.login("orekevfx", "Oaai13122001*")
+cl.login("aizh.an2669", "1234567890aiz")
 app = Flask(__name__)
 
 class Parsing:
@@ -30,7 +29,6 @@ class Parsing:
         if self.vk_req.status_code == 200:
             self.vk_main_information(self.data_for_write["VK"][f"{self.vk_nick}"])
             self.vk_about_user(self.data_for_write["VK"][f"{self.vk_nick}"])
-            self.vk_groups(self.data_for_write["VK"][f"{self.vk_nick}"])
         if self.insta_req.status_code == 200:
             self.insta_main_information(self.data_for_write["Instagram"][f"{self.insta_username}"])
         Write(self.vk_nick, self.data_for_write).write_to_json()
@@ -63,26 +61,6 @@ class Parsing:
 
         all_info.update({"Data": current_info})
 
-    def vk_groups(self, all_info):
-        current_info = {"Block": "Groups", "Data": {}}
-
-        try:
-            data = {"Groups": {}}
-            amount = self.vk_soup.find(class_="header_top clear_fix").\
-                            find(class_="header_count fl_l").text
-            data.update(Amount=int(amount))
-            all_groups = self.vk_soup.find_all(class_="group_name")
-
-            for group in all_groups:
-                title = group.find("a").text
-                link = group.find("a").get("href")
-                data["Groups"].update({str(title): str(link)})
-        except AttributeError:
-            data = "Not found"
-        finally:
-            current_info.update(data)
-
-        all_info.update({"Groups": current_info})
 
     def insta_main_information(self, all_info):
         current_info = {}
@@ -90,16 +68,31 @@ class Parsing:
             name1 = cl.user_info_by_username(self.insta_username).dict()
             name = name1["full_name"]
             bio = name1["biography"]
-            ava = name1["profile_pic_url_hd"]
-            
+            url = name1["profile_pic_url_hd"]
+            dir_path = "static/img"
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)
+
+            # The filename for the photo
+            filename = "profile_photo.jpg"
+            file_path = os.path.join(dir_path, filename)
+
+            # Download the photo and save it to the file path
+            response = requests.get(url)
+            with open(file_path, "wb") as f:
+                f.write(response.content)
+
+            # Print a message to indicate success or failure
+            if os.path.exists(file_path):
+                print("Profile photo downloaded successfully to", file_path)
+            else:
+                print("Failed to download profile photo")
         except AttributeError:
             name = "Not found"
             bio = "Not found"
-            ava = "Not found"
         finally:
             current_info.update(Name=str(name))
             current_info.update(Bio=str(bio))
-            current_info.update(Ava=str(ava))
         print(name1)
         all_info.update({"Main info": current_info})
 
@@ -119,6 +112,18 @@ class Write():
         with open(file_name, "rb") as f:
             data = json.load(f)
             print(data)
+
+def get_vk_data(vk_user_nick, insta_user_name):
+    with open("data.json", "r") as f:
+        data = json.load(f)
+        vk_name = data["VK"][vk_user_nick]["Main info"]["Name"]
+        insta_name = data["Instagram"][insta_user_name]["Main info"]["Name"]
+        print(vk_name)
+        print(insta_name)
+        if vk_name == insta_name:
+            print("Профили принадлежат одному и тому же человеку")
+        else:
+            print("Профили не принадлежат одному и тому же человеку")
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -133,3 +138,5 @@ def result():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
