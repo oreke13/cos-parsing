@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <h1>VK & Instagram Comparison - Результаты</h1>
+    <h1>БІРНЕШЕ ӘЛЕУМЕТТІК ЖЕЛІЛЕРДЕГІ АНОНИМДІ БІРДЕЙ ПАЙДАЛАНУШЫЛАРДЫ КРОСС-ПЛАТФОРМАЛЫҚ СӘЙКЕСТЕНДІРУ ӘДІСТЕРІН ТАЛДАУ</h1>
     <h2>{{ vk_nick }}:</h2>
     <ul>
         <li><strong>Имя:</strong> {{ data["VK"][vk_nick]["Main info"]["Name"] }}</li>
@@ -22,9 +22,15 @@
     <h2>{{ insta_name }}:</h2>
     <ul>
         <li><strong>Имя:</strong> {{ data["Instagram"][insta_name]["Main info"]["Name"] }}</li>
-        <li><strong>Биография:</strong> {{ data["Instagram"][insta_name]["Main info"]["Bio"] }}</li>
         <li><strong>Фото профиля:</strong> </li>
         <img src="static/img/profile_photo.jpg">
+        <li><strong>Биография:</strong> {{ data["Instagram"][insta_name]["Main info"]["Bio"] }}</li>
+        <li><strong>Количество постов:</strong> {{ data["Instagram"][insta_name]["Main info"]["Media"] }}</li>
+        <li><strong>Посдписчики:</strong> {{ data["Instagram"][insta_name]["Main info"]["Follower"] }}</li>
+        <li><strong>Подписки:</strong> {{ data["Instagram"][insta_name]["Main info"]["Following"] }}</li>
+        <li><strong>Номер телефона:</strong> {{ data["Instagram"][insta_name]["Main info"]["Cpn"] }}</li>
+        <li><strong>Номер телефона:</strong> {{ data["Instagram"][insta_name]["Main info"]["Ppn"] }}</li>
+        <li><strong>Почта:</strong> {{ data["Instagram"][insta_name]["Main info"]["Mail"] }}</li>
 
     </ul>
 </body>
