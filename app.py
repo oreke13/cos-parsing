@@ -10,7 +10,6 @@ cl.login("aizh.an2669", "1234567890aiz")
 app = Flask(__name__)
 
 class Parsing:
-    """Выполняет запрос и парсит всю нужную информацию"""
     def __init__(self, vk_user_nick, insta_user_name):
         self.vk_nick = vk_user_nick
         self.insta_username = insta_user_name
@@ -62,27 +61,28 @@ class Parsing:
         all_info.update({"Data": current_info})
 
 
+
     def insta_main_information(self, all_info):
         current_info = {}
         try:
             name1 = cl.user_info_by_username(self.insta_username).dict()
             name = name1["full_name"]
             bio = name1["biography"]
+            media = name1["media_count"]
+            follower = name1["follower_count"]
+            following = name1["following_count"]
+            cpn = name1["contact_phone_number"]
+            ppn = name1["public_phone_number"]
+            mail = name1["public_email"]
             url = name1["profile_pic_url_hd"]
             dir_path = "static/img"
             if not os.path.exists(dir_path):
                 os.makedirs(dir_path)
-
-            # The filename for the photo
             filename = "profile_photo.jpg"
             file_path = os.path.join(dir_path, filename)
-
-            # Download the photo and save it to the file path
             response = requests.get(url)
             with open(file_path, "wb") as f:
                 f.write(response.content)
-
-            # Print a message to indicate success or failure
             if os.path.exists(file_path):
                 print("Profile photo downloaded successfully to", file_path)
             else:
@@ -93,10 +93,14 @@ class Parsing:
         finally:
             current_info.update(Name=str(name))
             current_info.update(Bio=str(bio))
+            current_info.update(Media=str(media))
+            current_info.update(Follower=str(follower))
+            current_info.update(Following=str(following))
+            current_info.update(Cpn=str(cpn))
+            current_info.update(Ppn=str(ppn))
+            current_info.update(Mail=str(mail))
         print(name1)
         all_info.update({"Main info": current_info})
-
-
 
 class Write():
     def __init__(self, user_nick, dict_for_write):
@@ -112,18 +116,6 @@ class Write():
         with open(file_name, "rb") as f:
             data = json.load(f)
             print(data)
-
-def get_vk_data(vk_user_nick, insta_user_name):
-    with open("data.json", "r") as f:
-        data = json.load(f)
-        vk_name = data["VK"][vk_user_nick]["Main info"]["Name"]
-        insta_name = data["Instagram"][insta_user_name]["Main info"]["Name"]
-        print(vk_name)
-        print(insta_name)
-        if vk_name == insta_name:
-            print("Профили принадлежат одному и тому же человеку")
-        else:
-            print("Профили не принадлежат одному и тому же человеку")
 @app.route("/")
 def index():
     return render_template("index.html")
